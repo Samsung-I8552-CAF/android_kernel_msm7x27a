@@ -21,7 +21,7 @@ endif
 		obj-$(CONFIG_DEBUG_FS) += pmic_debugfs.o
 	endif
 endif
-
+obj-$(CONFIG_MSM_EVENT_TIMER)		+= event_timer.o
 obj-y += acpuclock.o
 obj-$(CONFIG_ARCH_MSM_KRAIT) += acpuclock-krait.o
 obj-$(CONFIG_ARCH_MSM7X27) += acpuclock-7627.o acpuclock-8625q.o clock-pll.o
@@ -422,3 +422,6 @@ obj-$(CONFIG_MSM_FIQ) += msm7k_fiq.o
 obj-$(CONFIG_MSM_FIQ) += msm7k_fiq_handler.o
 
 obj-$(CONFIG_SEC_LOG_LAST_KMSG) += sec_log.o
+obj-$(CONFIG_TURBO_BOOST) += msm_turbo.o
+obj-$(CONFIG_MSM_CPUFREQ_LIMITER) += cpufreq_limit.o
+obj-$(CONFIG_FORCE_FAST_CHARGE) += fastchg.o

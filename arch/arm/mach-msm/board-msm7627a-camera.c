@@ -24,6 +24,7 @@
 #include "devices-msm7x2xa.h"
 #include "board-msm7627a.h"
 #include <mach/vreg.h>
+#ifdef CONFIG_MSM_CAMERA
 
 #define GPIO_SKU1_CAM_VGA_SHDN    18
 #define GPIO_SKU1_CAM_VGA_RESET_N 29
@@ -193,19 +194,20 @@ static struct msm_camera_gpio_conf gpio_conf_sr200pc20 = {
 };
 #endif
 
-
+#ifdef CONFIG_MT9E013
 static struct msm_camera_gpio_conf gpio_conf_mt9e013 = {
 	.camera_off_table = camera_off_gpio_table,
 	.camera_on_table = camera_on_gpio_table,
 	.gpio_no_mux = 1,
 };
-
+#endif
+#ifdef CONFIG_WEBCAM_OV9726
 static struct msm_camera_gpio_conf gpio_conf_ov9726 = {
 	.camera_off_table = camera_off_gpio_table,
 	.camera_on_table = camera_on_gpio_table,
 	.gpio_no_mux = 1,
 };
-
+#endif
 #ifdef CONFIG_OV7692
 static struct gpio ov7692_cam_req_gpio[] = {
 	{GPIO_SKU1_CAM_VGA_SHDN, GPIOF_DIR_OUT, "CAM_VGA_SHDN"},
@@ -281,10 +283,10 @@ static struct camera_vreg_t msm_cam_vreg[] = {
 */
 };
 
-static struct camera_vreg_t ov5647_gpio_vreg[] = {
+/*static struct camera_vreg_t ov5647_gpio_vreg[] = {
 	{"cam_ov5647_avdd", REG_GPIO, 0, 0, 0},
 	{"cam_ov5647_vdd", REG_GPIO, 0, 0, 0},
-};
+};*/
 
 #ifdef CONFIG_OV5648
 static struct camera_vreg_t ov5648_gpio_vreg[] = {
@@ -300,15 +302,15 @@ static struct camera_vreg_t ov5648_gpio_vreg_evbd[] = {
 };
 #endif
 
-static struct camera_vreg_t ov8825_gpio_vreg[] = {
+/*static struct camera_vreg_t ov8825_gpio_vreg[] = {
 	{"cam_ov8825_avdd", REG_GPIO, 0, 0, 0},
 	{"cam_ov8825_vdd", REG_GPIO, 0, 0, 0},
-};
+};*/
 
-static struct camera_vreg_t ov7692_gpio_vreg[] = {
+/*static struct camera_vreg_t ov7692_gpio_vreg[] = {
 	{"cam_ov7692_avdd", REG_GPIO, 0, 0, 0},
 	{"cam_ov7692_vdd", REG_GPIO, 0, 0, 0},
-};
+};*/
 
 //kk0704.park :: static struct msm_camera_sensor_info msm_camera_sensor_s5k5ccgx_data;
 
@@ -341,7 +343,7 @@ struct msm_camera_device_platform_data msm_camera_device_data_csi0[] = {
 		},
 	},
 };
-
+#if defined(CONFIG_OV5647) || defined(CONFIG_OV5648)
 static struct i2c_board_info msm_act_main_cam_i2c_info = {
 	I2C_BOARD_INFO("msm_actuator", 0x11),
 };
@@ -353,7 +355,7 @@ static struct msm_actuator_info msm_act_main_cam_4_info = {
 	.vcm_pwd        = GPIO_CAM_GP_CAM_PWDN,
 	.vcm_enable     = 1,
 };
-
+#endif
 #ifdef CONFIG_S5K5CCGX
 static struct msm_camera_sensor_flash_data flash_s5k5ccgx = {
 	.flash_type             = MSM_CAMERA_FLASH_LED,
@@ -514,11 +516,9 @@ static struct msm_camera_sensor_info msm_camera_sensor_ov7692_data = {
 #endif
 
 #ifdef CONFIG_OV7695
-/*
 static struct gpio ov7695_cam_req_gpio_skud[] = {
 	{GPIO_SKUD_CAM_1MP_PWDN, GPIOF_DIR_OUT, "CAM_VGA_SHDN"},
 };
-*/ 
 
 static struct msm_gpio_set_tbl ov7695_cam_gpio_set_tbl_skud[] = {
 	{GPIO_SKUD_CAM_1MP_PWDN, GPIOF_OUT_INIT_LOW, 5000},
@@ -605,8 +605,8 @@ static struct msm_camera_sensor_info msm_camera_sensor_ov7695_raw_data = {
 	.sensor_type = BAYER_SENSOR,
 };
 #endif
-#ifdef CONFIG_OV5647
 
+#ifdef CONFIG_OV5647
 static struct msm_actuator_info msm_act_main_cam_5_info = {
 	.board_info     = &msm_act_main_cam_i2c_info,
 	.cam_name   = MSM_ACTUATOR_MAIN_CAM_5,
@@ -692,6 +692,7 @@ static struct msm_camera_sensor_info msm_camera_sensor_ov5648_data = {
 };
 #endif
 
+#ifdef CONFIG_OV8825
 static struct msm_camera_gpio_conf gpio_conf_ov8825 = {
 	.camera_off_table = camera_off_gpio_table,
 	.camera_on_table = camera_on_gpio_table,
@@ -738,7 +739,7 @@ static struct msm_camera_sensor_info msm_camera_sensor_ov8825_data = {
 	.sensor_type = BAYER_SENSOR,
 	.actuator_info = &msm_act_main_cam_3_info,
 };
-
+#endif
 #ifdef CONFIG_MT9E013
 static struct msm_camera_sensor_flash_data flash_mt9e013 = {
 	.flash_type             = MSM_CAMERA_FLASH_LED,
@@ -986,6 +987,7 @@ static struct i2c_board_info i2c_camera_devices[] = {
 	},
 */
 };
+#if defined(CONFIG_OV5648) || defined(CONFIG_OV7695_RAW)
 static struct i2c_board_info i2c_camera_devices_qpr_skud[] = {
 #ifdef CONFIG_OV5648
         {
@@ -1000,6 +1002,8 @@ static struct i2c_board_info i2c_camera_devices_qpr_skud[] = {
         },
 #endif
 };
+#endif
+#if defined(CONFIG_OV5648) || defined(CONFIG_OV7695)
 static struct i2c_board_info i2c_camera_devices_qpr[] = {
 #ifdef CONFIG_OV5648
 	{
@@ -1014,6 +1018,7 @@ static struct i2c_board_info i2c_camera_devices_qpr[] = {
 	},
 #endif
 };
+#endif
 
 #else
 static uint32_t camera_off_gpio_table[] = {
@@ -1096,10 +1101,10 @@ static void qrd1_camera_gpio_cfg(void)
 }
 #endif
 
-static void evb_camera_gpio_cfg(void)
+/*static void evb_camera_gpio_cfg(void)
 {
 	int rc = 0;
-/* //kk0704.park ARUBA_TEST
+/ //kk0704.park ARUBA_TEST
 	rc = gpio_request(msm_camera_sensor_ov5647_data.sensor_pwd, "ov5647");
 	if (rc < 0)
 		pr_err("%s: gpio_request OV5647 sensor_pwd: %d failed!",
@@ -1159,14 +1164,14 @@ static void evb_camera_gpio_cfg(void)
 	if (rc < 0)
 		pr_err("%s: unable to set gpio: %d direction for ov7692 camera\n",
 			__func__, msm_camera_sensor_ov7692_data.sensor_pwd);
-*/ //kk0704.park
-}
+/ //kk0704.park
+}/
 
 static void skud_camera_gpio_cfg(void)
 {
 	int rc = 0;
 
-/* //kk0704.park
+/ //kk0704.park
 	printk("skuD_camera_gpio_cfg in, cfg gpio\n");
 	printk("gpio request: GPIO_SKUD_CAM_5MP_SHDN_N is %d\n", GPIO_SKUD_CAM_5MP_SHDN_N);
 	rc = gpio_request(GPIO_SKUD_CAM_5MP_SHDN_N, "ov5648");
@@ -1253,7 +1258,7 @@ static void skud_camera_gpio_cfg(void)
         gpio_free(GPIO_SKUD_CAM_5MP_CAM_VCM_PWDN);
 */ //kk0704.park
 
-}
+
 #ifndef CONFIG_MSM_CAMERA_V4L2
 
 static void msm_camera_vreg_config(int vreg_en)
@@ -1863,6 +1868,7 @@ static struct platform_device *camera_devices_evb[] __initdata = {
 };
 #endif
 
+#ifdef CONFIG_SX150X
 enum {
 	SX150X_CAM,
 };
@@ -1883,7 +1889,7 @@ static struct i2c_board_info cam_exp_i2c_info[] __initdata = {
 		I2C_BOARD_INFO("sx1508q", 0x22),
 		.platform_data  = &sx150x_data[SX150X_CAM],
 	},
-};
+};*/
 
 static void __init register_i2c_devices(void)
 {
@@ -1891,6 +1897,7 @@ static void __init register_i2c_devices(void)
 				cam_exp_i2c_info,
 				ARRAY_SIZE(cam_exp_i2c_info));
 }
+#endif
 
 #ifndef CONFIG_MSM_CAMERA_V4L2
 #define LCD_CAMERA_LDO_2V8 35 /* SKU1&SKU3 2.8V LDO */
@@ -2047,7 +2054,7 @@ void __init msm7627a_camera_init(void)
 #ifndef CONFIG_MSM_CAMERA_V4L2
 		lcd_camera_power_init();
 #endif
-		evb_camera_gpio_cfg();
+		//evb_camera_gpio_cfg();
 	}
 
 	if(machine_is_qrd_skud_prime() ||
@@ -2132,3 +2139,7 @@ void __init msm7627a_camera_init(void)
 				i2c_camera_devices,
 				ARRAY_SIZE(i2c_camera_devices));
 	}
+# else 
+void __init msm7627a_camera_init(void)
+{ };
+#endif

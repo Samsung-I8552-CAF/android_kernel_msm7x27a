@@ -795,7 +795,7 @@ static struct platform_device mipi_dsi_NT35590_panel_device = {
 	}
 };
 */
-
+#ifdef CONFIG_MIPI_KYLE
 static int mipi_kyle_rotate_panel(void)
 {
 	int rotate = 1;
@@ -851,7 +851,7 @@ static struct platform_device mipi_kyle_panel_device = {
 		.platform_data = &mipi_kyle_panel_data,
 	}
 };
-
+#endif
 #if defined(CONFIG_FB_MSM_MIPI_HX8369B_WVGA_PT_PANEL) 
 static int mipi_HX8369B_rotate_panel(void)
 {
@@ -1010,7 +1010,7 @@ static struct platform_device *msm_fb_devices[] __initdata = {
 	&mipi_dsi_HX8357_panel_device,
 #elif defined(CONFIG_FB_MSM_LCDC_ILI9486L_HVGA_PT_PANEL)
 	&lcdc_ILI9486L_panel_device,
-#else
+#elif defined(CONFIG_MIPI_KYLE)
 	&mipi_kyle_panel_device,
 #endif
 
