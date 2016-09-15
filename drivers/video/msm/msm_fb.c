@@ -1599,11 +1599,12 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 
 #ifdef CONFIG_FB_MSM_LOGO
 #if defined(CONFIG_MACH_NEVIS3G_REV03) || defined(CONFIG_MACH_ROY) || !defined (CONFIG_FB_MSM_MIPI_NT35510_CMD_WVGA_PT_PANEL)// because of strange bottom image display when booting
-#ifndef CONFIG_FB_MSM_MIPI_HX8369B_WVGA_PT_PANEL
-	/* Flip buffer */
-	if (charging_boot != 1)	
-		if (!load_565rle_image(INIT_IMAGE_FILE, bf_supported))
-			;
+#if !defined(CONFIG_FB_MSM_MIPI_HX8369B_WVGA_PT_PANEL) \
+	&& !defined(CONFIG_FB_MSM_MIPI_NT35502_VIDEO_WVGA_PT_PANEL)
+		/* Flip buffer */
+		if (charging_boot != 1)	
+			if (!load_565rle_image(INIT_IMAGE_FILE, bf_supported))
+				;
 #endif
 #endif
 #endif
